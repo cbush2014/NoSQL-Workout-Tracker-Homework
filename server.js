@@ -37,57 +37,11 @@ db.Workouts.create({name: "Get 'Er Done Workout Tracker"})
     console.log(message);
   });
 
-  app.put("/exercises/:id", (req, res) => {
-    db.Workouts.updateOne({_id: req.params.id}, {rating: req.body.rating})
-    .then( dbExercise => {
-      res.json(dbExercise);
-      });  
-    });
-
-  app.post("/submit", ({body}, res) => {
-    console.log(body);
-    db.Exercises.create(body)
-      .then(({_id}) => db.Workouts.findOneAndUpdate({}, { $push: { exercises: _id } }, { new: true }))
-      .then(dbWorkouts  => {
-        res.json(dbWorkouts);
-      })
-      .catch(err => {
-        res.json(err);
-      });
-  });
-  
-  app.get("/exercises", (req, res) => {
-    db.Exercises.find({})
-      .then(dbExercises => {
-        res.json(dbExercises);
-      })
-      .catch(err => {
-        res.json(err);
-      });
-  });
-  
-  app.get("/workouts", (req, res) => {
-    db.Workouts.find({})
-      .then(dbWorkouts => {
-        res.json(dbWorkouts);
-      })
-      .catch(err => {
-        res.json(err);
-      });
-  });
-  
-  app.get("/populated", (req, res) => {
-    db.Workouts.find({})
-      .populate("{me: one}, {")
-      .then(dbWorkouts => {
-        res.json(dbWorkouts);
-      })
-      .catch(err => {
-        res.json(err);
-      });
-  });
-
-
+  app.get("/", (req,res) =>{
+    res.sendFile(path.join(__dirname, "./public/index.html"));
+  })
+  app.use(require("./controllers/exercises"));
+  app.use(require("./controllers/workout"));
   
   app.listen(PORT, () => {
     console.log(`App running on port ${PORT}!`);

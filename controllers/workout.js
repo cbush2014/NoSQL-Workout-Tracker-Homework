@@ -1,4 +1,7 @@
-app.get("/all", (req, res) => {
+const router = require("express").Router()
+
+
+router.get("/all", (req, res) => {
     db.workouts.find({}, (error, data) => {
       if (error) {
         res.send(error);
@@ -8,7 +11,7 @@ app.get("/all", (req, res) => {
     });
   });
   
-  app.get("/find/:id", (req, res) => {
+  router.get("/find/:id", (req, res) => {
     db.workouts.findOne(
       {
         _id: mongoose.ObjectId(req.params.id)
@@ -23,7 +26,7 @@ app.get("/all", (req, res) => {
     );
   });
   
-  app.post("/update/:id", (req, res) => {
+  router.post("/update/:id", (req, res) => {
     db.workouts.update(
       {
         _id: mongoose.ObjectId(req.params.id)
@@ -45,7 +48,7 @@ app.get("/all", (req, res) => {
     );
   });
   
-  app.delete("/delete/:id", (req, res) => {
+  router.delete("/delete/:id", (req, res) => {
     db.workouts.remove(
       {
         _id: mongoose.ObjectID(req.params.id)
@@ -60,7 +63,7 @@ app.get("/all", (req, res) => {
     );
   });
   
-  app.delete("/clearall", (req, res) => {
+  router.delete("/clearall", (req, res) => {
     db.workouts.remove({}, (error, response) => {
       if (error) {
         res.send(error);
@@ -69,4 +72,27 @@ app.get("/all", (req, res) => {
       }
     });
   });
+
   
+  router.get("/populated", (req, res) => {
+    db.Workouts.find({})
+      .populate("{me: one}, {")
+      .then(dbWorkouts => {
+        res.json(dbWorkouts);
+      })
+      .catch(err => {
+        res.json(err);
+      });
+  });
+
+  router.get("/workouts", (req, res) => {
+    db.Workouts.find({})
+      .then(dbWorkouts => {
+        res.json(dbWorkouts);
+      })
+      .catch(err => {
+        res.json(err);
+      });
+  });
+  
+module.exports = router;
