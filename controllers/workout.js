@@ -1,8 +1,9 @@
 const router = require("express").Router()
-
+const db = require("../models");
+const mongoose = require("mongoose");
 
 router.get("/all", (req, res) => {
-    db.workouts.find({}, (error, data) => {
+    db.Workouts.find({}, (error, data) => {
       if (error) {
         res.send(error);
       } else {
@@ -12,14 +13,16 @@ router.get("/all", (req, res) => {
   });
   
   router.get("/find/:id", (req, res) => {
-    db.workouts.findOne(
+    db.Exercises.findOne(
       {
         _id: mongoose.ObjectId(req.params.id)
       },
       (error, data) => {
         if (error) {
+          console.log(error);
           res.send(error);
         } else {
+          console.log(data);
           res.send(data);
         }
       }
@@ -27,7 +30,7 @@ router.get("/all", (req, res) => {
   });
   
   router.post("/update/:id", (req, res) => {
-    db.workouts.update(
+    db.Workouts.update(
       {
         _id: mongoose.ObjectId(req.params.id)
       },
@@ -49,7 +52,7 @@ router.get("/all", (req, res) => {
   });
   
   router.delete("/delete/:id", (req, res) => {
-    db.workouts.remove(
+    db.Workouts.remove(
       {
         _id: mongoose.ObjectID(req.params.id)
       },
@@ -64,7 +67,7 @@ router.get("/all", (req, res) => {
   });
   
   router.delete("/clearall", (req, res) => {
-    db.workouts.remove({}, (error, response) => {
+    db.Workouts.remove({}, (error, response) => {
       if (error) {
         res.send(error);
       } else {
@@ -85,7 +88,7 @@ router.get("/all", (req, res) => {
       });
   });
 
-  router.get("/workouts", (req, res) => {
+  router.get("/Workouts", (req, res) => {
     db.Workouts.find({})
       .then(dbWorkouts => {
         res.json(dbWorkouts);

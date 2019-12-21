@@ -3,7 +3,7 @@ const logger = require("morgan");
 const mongoose = require("mongoose");
 const path = require("path");
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3003;
 
 const db = require("./models");
 
@@ -31,13 +31,14 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/workout_tracker
 
 db.Workouts.create({name: "Get 'Er Done Workout Tracker"})
   .then(dbWorkouts => {
-    console.log(dbWorkouts);
+    console.log('log from inside dbWorkouts.create '+dbWorkouts);
   })
   .catch( ({message}) => {
-    console.log(message);
+    console.log('this is the error:' +message);
   });
 
   app.get("/", (req,res) =>{
+    console.log('GET root route');
     res.sendFile(path.join(__dirname, "./public/index.html"));
   })
   app.use(require("./controllers/exercises"));
